@@ -15,25 +15,24 @@ using namespace std;
 // Morse code structure
 struct MorseCode {
   // Morse code letters A-Z
-    const char *letters[26] = {
-        ".-",   "-...", "-.-.", "-..",  ".",   "..-.", "--.",  "....", "..",
-        ".---", "-.-",  ".-..", "--",   "-.",  "---",  ".--.", "--.-", ".-.",
-        "...",  "-",    "..-",  "...-", ".--", "-..-", "-.--", "--.."
-    };
-    
-    // Morse code for numbers 0-9
-    const char *numbers[10] = {
-        "-----", // 0
-        ".----", // 1
-        "..---", // 2
-        "...--", // 3
-        "....-", // 4
-        ".....", // 5
-        "-....", // 6
-        "--...", // 7
-        "---..", // 8
-        "----."  // 9
-    };
+  const char *letters[26] = {
+      ".-",   "-...", "-.-.", "-..",  ".",   "..-.", "--.",  "....", "..",
+      ".---", "-.-",  ".-..", "--",   "-.",  "---",  ".--.", "--.-", ".-.",
+      "...",  "-",    "..-",  "...-", ".--", "-..-", "-.--", "--.."};
+
+  // Morse code for numbers 0-9
+  const char *numbers[10] = {
+      "-----", // 0
+      ".----", // 1
+      "..---", // 2
+      "...--", // 3
+      "....-", // 4
+      ".....", // 5
+      "-....", // 6
+      "--...", // 7
+      "---..", // 8
+      "----."  // 9
+  };
 };
 // Password entry structure
 struct PasswordEntry {
@@ -426,24 +425,23 @@ struct Heap {
 
 // Function to convert text to Morse code
 void textToMorse(const char *text, char *morse, MorseCode &mc) {
-    // Initialize the Morse code string to empty
-    morse[0] = '\0';
-    
-    // Loop through each character of the input text
-    for (int i = 0; text[i]; i++) {
-        if (isalpha(text[i])) {
-            // Convert letters to Morse code
-            char c = toupper(text[i]) - 'A';
-            strcat(morse, mc.letters[c]);
-            strcat(morse, " ");
-        }
-        else if (isdigit(text[i])) {
-            // Convert numbers to Morse code
-            int num = text[i] - '0';
-            strcat(morse, mc.numbers[num]);
-            strcat(morse, " ");
-        }
+  // Initialize the Morse code string to empty
+  morse[0] = '\0';
+
+  // Loop through each character of the input text
+  for (int i = 0; text[i]; i++) {
+    if (isalpha(text[i])) {
+      // Convert letters to Morse code
+      char c = toupper(text[i]) - 'A';
+      strcat(morse, mc.letters[c]);
+      strcat(morse, " ");
+    } else if (isdigit(text[i])) {
+      // Convert numbers to Morse code
+      int num = text[i] - '0';
+      strcat(morse, mc.numbers[num]);
+      strcat(morse, " ");
     }
+  }
 }
 
 // Main function
@@ -457,18 +455,18 @@ int main() {
     cout << BLUE << "=================================================\n"
          << RESET;
     cout << YELLOW << "           Welcome to Password Manager\n";
-    cout << "     Select a data structure to get started!\n" << RESET;
+    cout << "     Choose your data structure to get started!\n" << RESET;
     cout << BLUE << "=================================================\n\n"
          << RESET;
 
     int dsChoice;
-    cout << BLUE << "\nSelect Data Structure:\n" << RESET;
-    cout << "1. Binary Tree\n";
-    cout << "2. Binary Search Tree\n";
-    cout << "3. Max Heap\n";
-    cout << "4. Min Heap\n";
-    cout << "5. Exit Program\n";
-    cout << "Select your choice: ";
+    cout << BLUE << "\nEnter Data Structure(e.g 1 <Enter>):\n" << RESET;
+    cout << "[1] Binary Tree\n";
+    cout << "[2] Binary Search Tree\n";
+    cout << "[3] Max Heap\n";
+    cout << "[4] Min Heap\n";
+    cout << "[5] Exit Program\n";
+    cout << "Enter your choice: ";
     cin >> dsChoice;
 
     if (cin.fail()) {
@@ -479,19 +477,19 @@ int main() {
     }
 
     if (dsChoice == 5) { // Exit entire program
-      cout  <<GREEN<< "\nThank you for using Password Manager!\n\n"<<RESET;
+      cout << GREEN << "\nThank you for using Password Manager!\n\n" << RESET;
       break;
     }
 
     bool returnToMainMenu = false;
     while (!returnToMainMenu) { // Operations menu loop
       cout << BLUE << "\nOperations Available:\n"
-           << RESET << "1. Add Password\n"
-           << "2. Remove Password\n"
-           << "3. Display Passwords\n"
-           << "4. Search Password\n"
-           << "5. Return to Data Structure Selection\n";
-      cout << "Select your choice: ";
+           << RESET << "[1] Add Password\n"
+           << "[2] Remove Password\n"
+           << "[3] Display Passwords\n"
+           << "[4] Search Password\n"
+           << "[5] Return to Data Structure Selection\n";
+      cout << "Enter your choice (e.g 2 <Enter>): ";
       int choice;
       cin >> choice;
       cout << '\n';
@@ -551,8 +549,9 @@ int main() {
       case 3: {
         string traversal;
         if (dsChoice == 1 || dsChoice == 2) {
-          cout << "Choose traversal (preorder, inorder, postorder) "
-                  "<lowercase>: ";
+          cout << "Enter a traversal (preorder, inorder, postorder) [e.g "
+                  "inorder (must be lowercase)] "
+                  ": ";
           cin >> traversal;
           cout << '\n';
         }
