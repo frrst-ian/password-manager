@@ -36,6 +36,8 @@ struct BinaryTree {
     strncpy(entry.text, text, 49);
     strncpy(entry.morse, morse, 199);
     entries.push_back(entry);
+    cout << GREEN << "\nPassword " << entry.text << " added successfully.\n"
+         << RESET;
   }
 
   // Preorder traversal
@@ -76,6 +78,35 @@ struct BinaryTree {
     else if (traversal == "postorder")
       postorder(0);
   }
+  bool remove(const char *text) {
+    // Step 1: Find the index of the password to remove
+    for (int i = 0; i < entries.size(); i++) {
+      if (strcmp(entries[i].text, text) == 0) {
+        // Step 2: Replace with the last entry and remove the last entry
+        entries[i] = entries.back();
+        entries.pop_back();
+        cout << GREEN << "\nPassword removed successfully.\n" << RESET;
+        return true;
+      }
+    }
+    cout << RED << "\nPassword not found.\n" << RESET;
+    return false;
+  }
+
+  // Search function for Binary Tree
+  bool search(const char *text) {
+    // Step 1: Linear search through all entries
+    for (const auto &entry : entries) {
+      // Step 2: Compare current entry with search text
+      if (strcmp(entry.text, text) == 0) {
+        cout << GREEN << "\nPassword found: " << entry.text
+             << "\nMorse code: " << entry.morse << RESET << endl;
+        return true;
+      }
+    }
+    cout << RED << "\nPassword not found.\n" << RESET;
+    return false;
+  }
 };
 
 // Binary Search Tree Implementation
@@ -98,9 +129,15 @@ struct BST {
   }
   // Function to insert a morse
   Node *insert(Node *root, const char *text, const char *morse) {
-    if (!root)
-      return createNode(text,
-                        morse); // Call the createNode if a  node doesn't exist
+    if (!root) {
+      // Create the new node when root is nullptr
+      root = createNode(text, morse);
+      cout << GREEN << "\nPassword " << root->entry.text
+           << " added successfully.\n"
+           << RESET;
+      return root;
+    }
+
     // Compares the text to the entry.text
     if (strcmp(text, root->entry.text) < 0)
       // If < 0 insert to left
@@ -108,8 +145,10 @@ struct BST {
     else
       // If > 0 insert to right
       root->right = insert(root->right, text, morse);
+
     return root;
   }
+
   // Preorder traversal
   void preorder(Node *node) {
     if (!node)
@@ -149,6 +188,61 @@ struct BST {
       inorder(root);
     else if (traversal == "postorder")
       postorder(root);
+  }
+
+  Node *search(Node *root, const char *text) {
+    // Step 1: Base case - if root is null or match found
+    if (!root || strcmp(root->entry.text, text) == 0) {
+      return root;
+    }
+
+    // Step 2: Recursive search based on comparison
+    if (strcmp(text, root->entry.text) < 0) {
+      return search(root->left, text);
+    }
+    return search(root->right, text);
+  }
+
+  // Helper function to find minimum value node
+  Node *minValueNode(Node *node) {
+    Node *current = node;
+    while (current && current->left != nullptr) {
+      current = current->left;
+    }
+    return current;
+  }
+
+  // Remove function for BST
+  Node *remove(Node *root, const char *text) {
+    // Step 1: Base case - if tree is empty
+    if (!root) {
+      return root;
+    }
+
+    // Step 2: Find the node to delete
+    if (strcmp(text, root->entry.text) < 0) {
+      root->left = remove(root->left, text);
+    } else if (strcmp(text, root->entry.text) > 0) {
+      root->right = remove(root->right, text);
+    } else {
+      // Step 3: Node with only one child or no child
+      if (!root->left) {
+        Node *temp = root->right;
+        delete root;
+        return temp;
+      } else if (!root->right) {
+        Node *temp = root->left;
+        delete root;
+        return temp;
+      }
+
+      // Step 4: Node with two children
+      Node *temp = minValueNode(root->right);
+      strcpy(root->entry.text, temp->entry.text);
+      strcpy(root->entry.morse, temp->entry.morse);
+      root->right = remove(root->right, temp->entry.text);
+    }
+    return root;
   }
 };
 
@@ -210,6 +304,8 @@ struct Heap {
     strncpy(entry.morse, morse, 199);
     entries.push_back(entry);
     heapifyUp(entries.size() - 1);
+    cout << GREEN << "\nPassword " << entry.text << " added successfully.\n"
+         << RESET;
   }
   // Function to remove top
   void removeTop() {
@@ -247,6 +343,20 @@ struct Heap {
 
     cout << "End of heap display.\n";
   }
+
+  bool search(const char *text) {
+    // Step 1: Linear search through all entries
+    for (const auto &entry : entries) {
+      // Step 2: Compare current entry with search text
+      if (strcmp(entry.text, text) == 0) {
+        cout << GREEN << "\nPassword found: " << entry.text
+             << "\nMorse code: " << entry.morse << RESET << endl;
+        return true;
+      }
+    }
+    cout << RED << "\nPassword not found.\n" << RESET;
+    return false;
+  }
 };
 
 // Function to convert text to Morse code
@@ -275,16 +385,22 @@ void textToMorse(const char *text, char *morse, MorseCode &mc) {
   }
 }
 
-// Main function
+// Updated Main Function
 int main() {
   BinaryTree bt;
   BST bst;
   Heap maxHeap(true), minHeap(false);
   MorseCode mc;
 
+  cout << BLUE << "=================================================\n"
+       << RESET;
+  cout << RED << "        Welcome to Password Manager\n";
+  cout << "     Select a data structure to get started!\n" << RESET;
+  cout << BLUE << "=================================================\n"
+       << RESET;
+
   int dsChoice;
-  // Menu for Data Structres selection
-  cout << "Choose Data Structure:\n";
+  cout << "Select a Data Structure:\n";
   cout << "1. Binary Tree\n";
   cout << "2. Binary Search Tree\n";
   cout << "3. Max Heap\n";
@@ -293,20 +409,27 @@ int main() {
   cin >> dsChoice;
 
   while (true) {
-    // Menu for operations
-    cout << "\nMenu:\n1. Add Password\n2. Remove Password\n3. Display "
-            "Passwords\n4. Exit\n";
+    cout << "\nOperations Available:\n"
+         << "1. Add Password\n"
+         << "2. Remove Password\n"
+         << "3. Display Passwords\n"
+         << "4. Search Password\n"
+         << "5. Exit\n";
+
     int choice;
     cin >> choice;
-    if (choice == 4)
+
+    if (choice == 5)
       break;
 
     char text[50], morse[200];
+
     switch (choice) {
-    case 1:
+    case 1: {
       cout << "Enter password: ";
       cin >> text;
       textToMorse(text, morse, mc);
+
       if (dsChoice == 1)
         bt.insert(text, morse);
       else if (dsChoice == 2)
@@ -316,20 +439,36 @@ int main() {
       else
         minHeap.insert(text, morse);
       break;
-    case 2:
-      if (dsChoice == 3)
+    }
+
+    case 2: {
+      cout << "Enter password to remove: ";
+      cin >> text;
+
+      if (dsChoice == 1) {
+        bt.remove(text);
+      } else if (dsChoice == 2) {
+        BST::Node *found = bst.search(bst.root, text);
+        if (found) {
+          bst.root = bst.remove(bst.root, text);
+          cout << GREEN << "\nPassword removed successfully.\n" << RESET;
+        } else {
+          cout << RED << "\nPassword not found.\n" << RESET;
+        }
+      } else if (dsChoice == 3)
         maxHeap.removeTop();
-      else if (dsChoice == 4)
-        minHeap.removeTop();
       else
-        cout << "Remove not supported for this structure.\n";
+        minHeap.removeTop();
       break;
+    }
+
     case 3: {
       string traversal;
       if (dsChoice == 1 || dsChoice == 2) {
-        cout << "Choose traversal (preorder,inorder, postorder) <lowercase>: ";
+        cout << "Choose traversal (preorder, inorder, postorder) <lowercase>: ";
         cin >> traversal;
       }
+
       if (dsChoice == 1)
         bt.display(traversal);
       else if (dsChoice == 2)
@@ -338,6 +477,28 @@ int main() {
         maxHeap.display();
       else
         minHeap.display();
+      break;
+    }
+
+    case 4: {
+      cout << "Enter password to search: ";
+      cin >> text;
+
+      if (dsChoice == 1) {
+        bt.search(text);
+      } else if (dsChoice == 2) {
+        BST::Node *result = bst.search(bst.root, text);
+        if (result) {
+          cout << GREEN << "\nPassword found: " << result->entry.text
+               << "\nMorse code: " << result->entry.morse << RESET << endl;
+        } else {
+          cout << RED << "\nPassword not found.\n" << RESET;
+        }
+      } else if (dsChoice == 3) {
+        maxHeap.search(text);
+      } else {
+        minHeap.search(text);
+      }
       break;
     }
     }
