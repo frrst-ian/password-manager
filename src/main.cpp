@@ -12,14 +12,29 @@ using namespace std;
 #define YELLOW "\033[33m"
 #define BLUE "\033[34m"
 
-// Morse code list
+// Morse code structure
 struct MorseCode {
-  const char *letters[26] = {
-      ".-",   "-...", "-.-.", "-..",  ".",   "..-.", "--.",  "....", "..",
-      ".---", "-.-",  ".-..", "--",   "-.",  "---",  ".--.", "--.-", ".-.",
-      "...",  "-",    "..-",  "...-", ".--", "-..-", "-.--", "--.."};
+  // Morse code letters A-Z
+    const char *letters[26] = {
+        ".-",   "-...", "-.-.", "-..",  ".",   "..-.", "--.",  "....", "..",
+        ".---", "-.-",  ".-..", "--",   "-.",  "---",  ".--.", "--.-", ".-.",
+        "...",  "-",    "..-",  "...-", ".--", "-..-", "-.--", "--.."
+    };
+    
+    // Morse code for numbers 0-9
+    const char *numbers[10] = {
+        "-----", // 0
+        ".----", // 1
+        "..---", // 2
+        "...--", // 3
+        "....-", // 4
+        ".....", // 5
+        "-....", // 6
+        "--...", // 7
+        "---..", // 8
+        "----."  // 9
+    };
 };
-
 // Password entry structure
 struct PasswordEntry {
   char text[50];
@@ -410,30 +425,27 @@ struct Heap {
 
 // Function to convert text to Morse code
 void textToMorse(const char *text, char *morse, MorseCode &mc) {
-
-  // Initialize the Morse code string to an empty string
-  morse[0] = '\0'; //  This sets the first character of the morse string to
-                   //  the null terminator to clear any previous content
-
-  //  Loop through each character of the input text string
-  for (int i = 0; text[i]; i++) {
-
-    // Check if the character is an alphabet letter (A-Z or a-z)
-    if (isalpha(text[i])) {
-
-      // Convert the letter to uppercase and then calculate its index
-      char c = toupper(text[i]) - 'A';
-
-      //  Append the corresponding Morse code for the character from the
-      //  MorseCode object
-      strcat(morse, mc.letters[c]);
-
-      // Add a space between Morse code letters
-      strcat(morse, " ");
+    // Initialize the Morse code string to empty
+    morse[0] = '\0';
+    
+    // Loop through each character of the input text
+    for (int i = 0; text[i]; i++) {
+        if (isalpha(text[i])) {
+            // Convert letters to Morse code
+            char c = toupper(text[i]) - 'A';
+            strcat(morse, mc.letters[c]);
+            strcat(morse, " ");
+        }
+        else if (isdigit(text[i])) {
+            // Convert numbers to Morse code
+            int num = text[i] - '0';
+            strcat(morse, mc.numbers[num]);
+            strcat(morse, " ");
+        }
     }
-  }
 }
 
+// Main function
 int main() {
   BinaryTree bt;
   BST bst;
