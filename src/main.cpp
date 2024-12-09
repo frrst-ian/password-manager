@@ -50,7 +50,9 @@ struct BinaryTree {
       return;
 
     // Visit root node
-    cout << entries[index].text << " (Morse: " << entries[index].morse << ")\n";
+    cout << YELLOW << entries[index].text << " (Morse: " << entries[index].morse
+         << ")\n"
+         << RESET;
 
     // Visit left node
     preorder(2 * index + 1);
@@ -69,7 +71,9 @@ struct BinaryTree {
     inorder(2 * index + 1);
 
     // Visit root node
-    cout << entries[index].text << " (Morse: " << entries[index].morse << ")\n";
+    cout << YELLOW << entries[index].text << " (Morse: " << entries[index].morse
+         << ")\n"
+         << RESET;
 
     // Visit right node
     inorder(2 * index + 2);
@@ -88,7 +92,9 @@ struct BinaryTree {
     postorder(2 * index + 2);
 
     // Visit root node
-    cout << entries[index].text << " (Morse: " << entries[index].morse << ")\n";
+    cout << YELLOW << entries[index].text << " (Morse: " << entries[index].morse
+         << ")\n"
+         << RESET;
   }
 
   // Function to display passwords based on traversal selection
@@ -99,7 +105,7 @@ struct BinaryTree {
       return;
     }
     // Display passwords based on conditions met
-    cout << "Passwords (Binary Tree, " << traversal << "):\n";
+    cout << BLUE << "Passwords (Binary Tree, " << traversal << "):\n" << RESET;
     if (traversal == "preorder")
       preorder(0);
     else if (traversal == "inorder")
@@ -185,7 +191,9 @@ struct BST {
   void preorder(Node *node) {
     if (!node)
       return;
-    cout << node->entry.text << " (Morse: " << node->entry.morse << ")\n";
+    cout << YELLOW << node->entry.text << " (Morse: " << node->entry.morse
+         << ")\n"
+         << RESET;
     preorder(node->left);
     preorder(node->right);
   }
@@ -195,7 +203,9 @@ struct BST {
     if (!node)
       return;
     inorder(node->left);
-    cout << node->entry.text << " (Morse: " << node->entry.morse << ")\n";
+    cout << YELLOW << node->entry.text << " (Morse: " << node->entry.morse
+         << ")\n"
+         << RESET;
     inorder(node->right);
   }
 
@@ -205,7 +215,9 @@ struct BST {
       return;
     postorder(node->left);
     postorder(node->right);
-    cout << node->entry.text << " (Morse: " << node->entry.morse << ")\n";
+    cout << YELLOW << node->entry.text << " (Morse: " << node->entry.morse
+         << ")\n"
+         << RESET;
   }
 
   // Function to display the passwords based on traversal selection
@@ -214,7 +226,8 @@ struct BST {
       cout << "No passwords stored.\n";
       return;
     }
-    cout << "Passwords (Binary Search Tree, " << traversal << "):\n";
+    cout << BLUE << "Passwords (Binary Search Tree, " << traversal << "):\n"
+         << RESET;
     if (traversal == "preorder")
       preorder(root);
     else if (traversal == "inorder")
@@ -365,18 +378,19 @@ struct Heap {
 
     // Print the type of heap (Max or Min).
     if (isMaxHeap) {
-      cout << "Passwords (Heap, Max):\n";
+      cout << BLUE << "Passwords (Heap, Max):\n" << RESET;
     } else {
-      cout << "Passwords (Heap, Min):\n";
+      cout << BLUE << "Passwords (Heap, Min):\n" << RESET;
     }
 
     //  Loop through all entries in the heap and display each one.
     for (auto &entry : entries) {
       // For each entry, print the password and its Morse code.
-      cout << entry.text << " (Morse: " << entry.morse << ")\n";
+      cout << YELLOW << entry.text << " (Morse: " << entry.morse << ")\n"
+           << RESET;
     }
 
-    cout << "End of heap display.\n";
+    cout << "\n";
   }
 
   bool search(const char *text) {
@@ -429,13 +443,13 @@ int main() {
   while (true) { // Main program loop
     cout << BLUE << "=================================================\n"
          << RESET;
-    cout << RED << "        Welcome to Password Manager\n";
+    cout << YELLOW << "           Welcome to Password Manager\n";
     cout << "     Select a data structure to get started!\n" << RESET;
-    cout << BLUE << "=================================================\n"
+    cout << BLUE << "=================================================\n\n"
          << RESET;
 
     int dsChoice;
-    cout << "Select a Data Structure:\n";
+    cout << BLUE << "\nSelect Data Structure:\n" << RESET;
     cout << "1. Binary Tree\n";
     cout << "2. Binary Search Tree\n";
     cout << "3. Max Heap\n";
@@ -452,22 +466,22 @@ int main() {
     }
 
     if (dsChoice == 5) { // Exit entire program
-      cout << "\nThank you for using Password Manager!\n";
+      cout  <<GREEN<< "\nThank you for using Password Manager!\n\n"<<RESET;
       break;
     }
 
     bool returnToMainMenu = false;
     while (!returnToMainMenu) { // Operations menu loop
-      cout << "\nOperations Available:\n"
-           << "1. Add Password\n"
+      cout << BLUE << "\nOperations Available:\n"
+           << RESET << "1. Add Password\n"
            << "2. Remove Password\n"
            << "3. Display Passwords\n"
            << "4. Search Password\n"
            << "5. Return to Data Structure Selection\n";
       cout << "Select your choice: ";
-
       int choice;
       cin >> choice;
+      cout << '\n';
       // Input validation
       if (cin.fail()) {
         cin.clear();
@@ -527,6 +541,7 @@ int main() {
           cout << "Choose traversal (preorder, inorder, postorder) "
                   "<lowercase>: ";
           cin >> traversal;
+          cout << '\n';
         }
 
         if (dsChoice == 1)
