@@ -3,6 +3,12 @@
 #include <bits/stdc++.h> // Include all C++ STL
 using namespace std;
 
+#define RESET "\033[0m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+
 // Morse code list
 struct MorseCode {
   const char *letters[26] = {
