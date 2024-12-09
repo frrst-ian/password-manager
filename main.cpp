@@ -32,9 +32,12 @@ struct BinaryTree {
 
   // Function to insert a password
   void insert(const char *text, const char *morse) {
+    // Create a new PasswordEntry object
     PasswordEntry entry;
+    // Copies text into entry.text
     strncpy(entry.text, text, 49);
     strncpy(entry.morse, morse, 199);
+    // Adds to entries
     entries.push_back(entry);
     cout << GREEN << "\nPassword " << entry.text << " added successfully.\n"
          << RESET;
@@ -42,34 +45,60 @@ struct BinaryTree {
 
   // Preorder traversal
   void preorder(int index) {
+    // Checks if index is out of bounds
     if (index >= entries.size())
       return;
+
+    // Visit root node
     cout << entries[index].text << " (Morse: " << entries[index].morse << ")\n";
+
+    // Visit left node
     preorder(2 * index + 1);
+
+    // Visit right node
     preorder(2 * index + 2);
   }
+
   // Inorder traversal
   void inorder(int index) {
+    // Checks if index is out of bounds
     if (index >= entries.size())
       return;
+
+    // Visit left node
     inorder(2 * index + 1);
+
+    // Visit root node
     cout << entries[index].text << " (Morse: " << entries[index].morse << ")\n";
+
+    // Visit right node
     inorder(2 * index + 2);
   }
+
   // Post order traversal
   void postorder(int index) {
+    // Checks if index is out of bounds
     if (index >= entries.size())
       return;
+
+    // Visit left node
     postorder(2 * index + 1);
+
+    // Visit right node
     postorder(2 * index + 2);
+
+    // Visit root node
     cout << entries[index].text << " (Morse: " << entries[index].morse << ")\n";
   }
+
   // Function to display passwords based on traversal selection
   void display(const string &traversal) {
+    // Checks if entries is empty
     if (entries.empty()) {
       cout << "No passwords stored.\n";
       return;
     }
+    // Display passwords based on conditions met
     cout << "Passwords (Binary Tree, " << traversal << "):\n";
     if (traversal == "preorder")
       preorder(0);
@@ -78,12 +107,15 @@ struct BinaryTree {
     else if (traversal == "postorder")
       postorder(0);
   }
+
+  // Function to remove a password
   bool remove(const char *text) {
-    // Step 1: Find the index of the password to remove
+    //  Find the index of the password to remove
     for (int i = 0; i < entries.size(); i++) {
       if (strcmp(entries[i].text, text) == 0) {
-        // Step 2: Replace with the last entry and remove the last entry
+        //  Replace with the last entry and remove the last entry
         entries[i] = entries.back();
+
         entries.pop_back();
         cout << GREEN << "\nPassword removed successfully.\n" << RESET;
         return true;
@@ -95,9 +127,9 @@ struct BinaryTree {
 
   // Search function for Binary Tree
   bool search(const char *text) {
-    // Step 1: Linear search through all entries
+    // Search through all entries
     for (const auto &entry : entries) {
-      // Step 2: Compare current entry with search text
+      // Compare current entry with search text
       if (strcmp(entry.text, text) == 0) {
         cout << GREEN << "\nPassword found: " << entry.text
              << "\nMorse code: " << entry.morse << RESET << endl;
@@ -166,6 +198,7 @@ struct BST {
     cout << node->entry.text << " (Morse: " << node->entry.morse << ")\n";
     inorder(node->right);
   }
+
   // Post order traversal
   void postorder(Node *node) {
     if (!node)
@@ -191,12 +224,12 @@ struct BST {
   }
 
   Node *search(Node *root, const char *text) {
-    // Step 1: Base case - if root is null or match found
+    // Base case - if root is null or match found
     if (!root || strcmp(root->entry.text, text) == 0) {
       return root;
     }
 
-    // Step 2: Recursive search based on comparison
+    // Recursive search based on comparison
     if (strcmp(text, root->entry.text) < 0) {
       return search(root->left, text);
     }
@@ -214,18 +247,18 @@ struct BST {
 
   // Remove function for BST
   Node *remove(Node *root, const char *text) {
-    // Step 1: Base case - if tree is empty
+    // Base case - if tree is empty
     if (!root) {
       return root;
     }
 
-    // Step 2: Find the node to delete
+    // Find the node to delete
     if (strcmp(text, root->entry.text) < 0) {
       root->left = remove(root->left, text);
     } else if (strcmp(text, root->entry.text) > 0) {
       root->right = remove(root->right, text);
     } else {
-      // Step 3: Node with only one child or no child
+      // Node with only one child or no child
       if (!root->left) {
         Node *temp = root->right;
         delete root;
@@ -236,7 +269,7 @@ struct BST {
         return temp;
       }
 
-      // Step 4: Node with two children
+      // Node with two children
       Node *temp = minValueNode(root->right);
       strcpy(root->entry.text, temp->entry.text);
       strcpy(root->entry.morse, temp->entry.morse);
@@ -253,6 +286,7 @@ struct Heap {
 
   Heap(bool isMax) : isMaxHeap(isMax) {}
 
+  // Repeatedly swap with parent until heap property is satisfied
   void heapifyUp(int index) {
     int parent = (index - 1) / 2;
     while (index > 0 && compare(entries[parent], entries[index])) {
@@ -261,7 +295,7 @@ struct Heap {
       parent = (index - 1) / 2;
     }
   }
-
+  // Repeatedly swap with higher priority child until heap property is satisfied
   void heapifyDown(int index) {
     int largestOrSmallest = index;
     int left = 2 * index + 1;
@@ -280,7 +314,7 @@ struct Heap {
       heapifyDown(largestOrSmallest);
     }
   }
-
+  // Function to perform heap comparison
   bool compare(PasswordEntry &a, PasswordEntry &b) {
     if (isMaxHeap) {
       // Condition to put larger value at the top of the heap
@@ -319,6 +353,7 @@ struct Heap {
     heapifyDown(0);
   }
 
+  // Function to display passwords
   void display() {
     //  Check if the heap is empty.
     if (entries.empty()) {
@@ -385,7 +420,7 @@ void textToMorse(const char *text, char *morse, MorseCode &mc) {
   }
 }
 
-// Updated Main Function
+// Main Function
 int main() {
   BinaryTree bt;
   BST bst;
