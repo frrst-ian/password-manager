@@ -251,6 +251,7 @@ struct BST {
       postorder(root);
   }
 
+  // Function to search a password in BST
   Node *search(Node *root, const char *text) {
     // Base case - if root is null or match found
     if (!root || strcmp(root->entry.text, text) == 0) {
