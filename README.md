@@ -14,7 +14,7 @@ This project serves as our final project in Data Structures and Algorithm course
 ## Design
 
 <div align='center'>
-<img src='./assets.shots.png' alt='Screenshot of desktop design'>
+<img src='./assets/shots.png' alt='Screenshot of desktop design'>
 </div>
 
 ## Features
