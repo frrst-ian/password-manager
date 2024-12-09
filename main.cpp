@@ -420,122 +420,149 @@ void textToMorse(const char *text, char *morse, MorseCode &mc) {
   }
 }
 
-// Main Function
 int main() {
   BinaryTree bt;
   BST bst;
   Heap maxHeap(true), minHeap(false);
   MorseCode mc;
 
-  cout << BLUE << "=================================================\n"
-       << RESET;
-  cout << RED << "        Welcome to Password Manager\n";
-  cout << "     Select a data structure to get started!\n" << RESET;
-  cout << BLUE << "=================================================\n"
-       << RESET;
+  while (true) { // Main program loop
+    cout << BLUE << "=================================================\n"
+         << RESET;
+    cout << RED << "        Welcome to Password Manager\n";
+    cout << "     Select a data structure to get started!\n" << RESET;
+    cout << BLUE << "=================================================\n"
+         << RESET;
 
-  int dsChoice;
-  cout << "Select a Data Structure:\n";
-  cout << "1. Binary Tree\n";
-  cout << "2. Binary Search Tree\n";
-  cout << "3. Max Heap\n";
-  cout << "4. Min Heap\n";
-  cout << "Select your choice: ";
-  cin >> dsChoice;
+    int dsChoice;
+    cout << "Select a Data Structure:\n";
+    cout << "1. Binary Tree\n";
+    cout << "2. Binary Search Tree\n";
+    cout << "3. Max Heap\n";
+    cout << "4. Min Heap\n";
+    cout << "5. Exit Program\n";
+    cout << "Select your choice: ";
+    cin >> dsChoice;
 
-  while (true) {
-    cout << "\nOperations Available:\n"
-         << "1. Add Password\n"
-         << "2. Remove Password\n"
-         << "3. Display Passwords\n"
-         << "4. Search Password\n"
-         << "5. Exit\n";
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      cout << "Invalid input! Please enter a number.\n";
+      continue;
+    }
 
-    int choice;
-    cin >> choice;
-
-    if (choice == 5)
-      break;
-
-    char text[50], morse[200];
-
-    switch (choice) {
-    case 1: {
-      cout << "Enter password: ";
-      cin >> text;
-      textToMorse(text, morse, mc);
-
-      if (dsChoice == 1)
-        bt.insert(text, morse);
-      else if (dsChoice == 2)
-        bst.root = bst.insert(bst.root, text, morse);
-      else if (dsChoice == 3)
-        maxHeap.insert(text, morse);
-      else
-        minHeap.insert(text, morse);
+    if (dsChoice == 5) { // Exit entire program
+      cout << "\nThank you for using Password Manager!\n";
       break;
     }
 
-    case 2: {
-      cout << "Enter password to remove: ";
-      cin >> text;
+    bool returnToMainMenu = false;
+    while (!returnToMainMenu) { // Operations menu loop
+      cout << "\nOperations Available:\n"
+           << "1. Add Password\n"
+           << "2. Remove Password\n"
+           << "3. Display Passwords\n"
+           << "4. Search Password\n"
+           << "5. Return to Data Structure Selection\n";
+      cout << "Select your choice: ";
 
-      if (dsChoice == 1) {
-        bt.remove(text);
-      } else if (dsChoice == 2) {
-        BST::Node *found = bst.search(bst.root, text);
-        if (found) {
-          bst.root = bst.remove(bst.root, text);
-          cout << GREEN << "\nPassword removed successfully.\n" << RESET;
-        } else {
-          cout << RED << "\nPassword not found.\n" << RESET;
-        }
-      } else if (dsChoice == 3)
-        maxHeap.removeTop();
-      else
-        minHeap.removeTop();
-      break;
-    }
-
-    case 3: {
-      string traversal;
-      if (dsChoice == 1 || dsChoice == 2) {
-        cout << "Choose traversal (preorder, inorder, postorder) <lowercase>: ";
-        cin >> traversal;
+      int choice;
+      cin >> choice;
+      // Input validation
+      if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input! Please enter a number.\n";
+        continue;
       }
 
-      if (dsChoice == 1)
-        bt.display(traversal);
-      else if (dsChoice == 2)
-        bst.display(traversal);
-      else if (dsChoice == 3)
-        maxHeap.display();
-      else
-        minHeap.display();
-      break;
-    }
-
-    case 4: {
-      cout << "Enter password to search: ";
-      cin >> text;
-
-      if (dsChoice == 1) {
-        bt.search(text);
-      } else if (dsChoice == 2) {
-        BST::Node *result = bst.search(bst.root, text);
-        if (result) {
-          cout << GREEN << "\nPassword found: " << result->entry.text
-               << "\nMorse code: " << result->entry.morse << RESET << endl;
-        } else {
-          cout << RED << "\nPassword not found.\n" << RESET;
-        }
-      } else if (dsChoice == 3) {
-        maxHeap.search(text);
-      } else {
-        minHeap.search(text);
+      if (choice == 5) {
+        returnToMainMenu = true;
+        continue;
       }
-      break;
-    }
+
+      char text[50], morse[200];
+
+      switch (choice) {
+      case 1: {
+        cout << "Enter password: ";
+        cin >> text;
+        textToMorse(text, morse, mc);
+
+        if (dsChoice == 1)
+          bt.insert(text, morse);
+        else if (dsChoice == 2)
+          bst.root = bst.insert(bst.root, text, morse);
+        else if (dsChoice == 3)
+          maxHeap.insert(text, morse);
+        else
+          minHeap.insert(text, morse);
+        break;
+      }
+
+      case 2: {
+        cout << "Enter password to remove: ";
+        cin >> text;
+
+        if (dsChoice == 1) {
+          bt.remove(text);
+        } else if (dsChoice == 2) {
+          BST::Node *foundNode = bst.search(bst.root, text);
+          if (foundNode) {
+            bst.root = bst.remove(bst.root, text);
+            cout << GREEN << "\nPassword removed successfully.\n" << RESET;
+          } else {
+            cout << RED << "\nPassword not found.\n" << RESET;
+          }
+        } else if (dsChoice == 3)
+          maxHeap.removeTop();
+        else
+          minHeap.removeTop();
+        break;
+      }
+
+      case 3: {
+        string traversal;
+        if (dsChoice == 1 || dsChoice == 2) {
+          cout << "Choose traversal (preorder, inorder, postorder) "
+                  "<lowercase>: ";
+          cin >> traversal;
+        }
+
+        if (dsChoice == 1)
+          bt.display(traversal);
+        else if (dsChoice == 2)
+          bst.display(traversal);
+        else if (dsChoice == 3)
+          maxHeap.display();
+        else
+          minHeap.display();
+        break;
+      }
+
+      case 4: {
+        cout << "Enter password to search: ";
+        cin >> text;
+
+        if (dsChoice == 1) {
+          bt.search(text);
+        } else if (dsChoice == 2) {
+          BST::Node *resultNode = bst.search(bst.root, text);
+          if (resultNode) {
+            cout << GREEN << "\nPassword found: " << resultNode->entry.text
+                 << "\nMorse code: " << resultNode->entry.morse << RESET
+                 << endl;
+          } else {
+            cout << RED << "\nPassword not found.\n" << RESET;
+          }
+        } else if (dsChoice == 3) {
+          maxHeap.search(text);
+        } else {
+          minHeap.search(text);
+        }
+        break;
+      }
+      }
     }
   }
   return 0;
